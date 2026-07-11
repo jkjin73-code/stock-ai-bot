@@ -1,1 +1,5 @@
-
+yfinance
+pandas
+requests
+feedparser
+python-telegram-bot==13.15
