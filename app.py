@@ -1,4 +1,6 @@
 import streamlit as st
+st.title("정상 실행됨")
+import streamlit as st
 
 # 파일에서 종목 불러오기
 def load_stocks():
