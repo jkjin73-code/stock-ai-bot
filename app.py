@@ -1,11 +1,15 @@
 import streamlit as st
 
+# 👉 종목 이름 ↔ 코드 매핑
 stock_map = {
     "삼성전자": "005930.KS",
     "하이닉스": "000660.KS",
     "네이버": "035420.KS",
     "카카오": "035720.KS"
 }
+
+# 👉 코드 → 이름 변환용
+reverse_map = {v: k for k, v in stock_map.items()}
 
 def load_stocks():
     try:
@@ -23,35 +27,69 @@ st.title("📈 주식 관리 UI")
 
 stocks = load_stocks()
 
+# ------------------------
+# 현재 종목 + 이름 표시 + 삭제
+# ------------------------
 st.subheader("현재 종목")
 
 if not stocks:
     st.write("종목 없음")
 else:
     for i, stock in enumerate(stocks):
+        name = reverse_map.get(stock, "알수없음")
+
         col1, col2 = st.columns([3,1])
 
         with col1:
-            st.write(stock)
+            st.write(f"{name} ({stock})")
 
         with col2:
-            if st.button(f"삭제_{stock}", key=f"del_{stock}_{i}"):
+            if st.button("삭제", key=f"del_{stock}_{i}"):
                 new_stocks = [s for s in stocks if s != stock]
                 save_stocks(new_stocks)
                 st.rerun()
 
-st.subheader("종목 추가")
+# ------------------------
+# 종목 검색 (자동 추천)
+# ------------------------
+st.subheader("종목 검색")
 
-user_input = st.text_input("종목 이름 또는 코드 입력").strip()
+search = st.text_input("종목 이름 입력 (예: 삼, 네, 카)").strip()
 
-if st.button("추가"):
+filtered = []
+
+if search:
+    for name in stock_map.keys():
+        if search in name:
+            filtered.append(name)
+
+# 추천 리스트 표시
+if filtered:
+    st.write("추천 종목:")
+    for name in filtered:
+        if st.button(name):
+            code = stock_map[name]
+            if code not in stocks:
+                stocks.append(code)
+                save_stocks(stocks)
+                st.success(f"{name} 추가됨!")
+                st.rerun()
+            else:
+                st.warning("이미 있음")
+
+# ------------------------
+# 직접 코드 추가
+# ------------------------
+st.subheader("직접 코드 추가")
+
+user_input = st.text_input("코드 입력 (예: 005930.KS)").strip()
+
+if st.button("코드로 추가"):
     if user_input:
-        code = stock_map.get(user_input, user_input)
-
-        if code not in stocks:
-            stocks.append(code)
+        if user_input not in stocks:
+            stocks.append(user_input)
             save_stocks(stocks)
-            st.success(f"{code} 추가됨!")
+            st.success(f"{user_input} 추가됨!")
             st.rerun()
         else:
             st.warning("이미 있는 종목")
