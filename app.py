@@ -34,24 +34,31 @@ st.subheader("현재 종목")
 if not stocks:
     st.write("종목 없음")
 else:
-    for i, stock in enumerate(stocks):
-        col1, col2 = st.columns([3,1])
+   for i, stock in enumerate(stocks):
+    col1, col2 = st.columns([3,1])
 
-        with col1:
-            st.write(stock)
+    with col1:
+        st.write(stock)
 
-        with col2:
-            if st.button("삭제", key=f"del_{i}"):
-                stocks.pop(i)
-                save_stocks(stocks)
-                st.rerun()
+    with col2:
+        if st.button(f"삭제_{stock}", key=f"del_{stock}_{i}"):
+            new_stocks = [s for s in stocks if s != stock]
+            save_stocks(new_stocks)
+            st.rerun()
 
 # ------------------------
 # 종목 추가 (한글 입력 가능)
 # ------------------------
 st.subheader("종목 추가")
 
-user_input = st.text_input("종목 이름 또는 코드 입력 (예: 삼성전자 / 005930.KS)")
+# 1. 입력값
+user_input = st.text_input("종목 이름 또는 코드 입력").strip()
+
+# 2. 삭제 로직 (새 리스트)
+new_stocks = [s for s in stocks if s != stock]
+
+# 3. 버튼 key 고유화
+key=f"del_{stock}_{i}"
 
 if st.button("추가"):
     if user_input:
