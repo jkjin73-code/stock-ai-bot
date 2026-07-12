@@ -3,19 +3,11 @@ import time
 import requests
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
-stocks = {
-    "Apple": "AAPL",
-    "Tesla": "TSLA",
-    "Nvidia": "NVDA",
-    "Microsoft": "MSFT",
-    "Amazon": "AMZN",
+def load_stocks():
+    with open("stocks.txt") as f:
+        return [line.strip() for line in f]
 
-    "000660.KS",  # SK하이닉스
-    "035420.KS",  # 네이버
-    "035720.KS",  # 카카오
-    "005930.KS",  # 삼성전자 🔥 추가
-    "051910.KS"   # LG화학 🔥 추가
-}
+stocks = load_stocks()
 
 def get_stock_data(ticker):
     df = yf.Ticker(ticker).history(period="6mo")
