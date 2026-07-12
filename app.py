@@ -6,7 +6,7 @@ import streamlit as st
 def load_stocks():
     try:
         with open("stocks.txt") as f:
-            return [line.strip() for line in f]
+            return [line.strip() for line in f if line.strip()]
     except:
         return []
 
