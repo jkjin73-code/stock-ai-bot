@@ -14,7 +14,7 @@ reverse_map = {v: k for k, v in stock_map.items()}
 def load_stocks():
     try:
         with open("stocks.txt") as f:
-            return [line.strip() for line in f if line.strip()]
+            return [line.strip().replace(" ", "") for line in f if line.strip()]
     except:
         return []
 
@@ -54,8 +54,8 @@ else:
 # ------------------------
 st.subheader("종목 검색")
 
-search = st.text_input("종목 이름 입력 (예: 삼, 네, 카)").strip()
-
+search = st.text_input("종목 이름 입력", key="search_box")
+user_input = st.text_input("코드 입력", key="code_box")
 filtered = []
 
 if search:
@@ -66,8 +66,8 @@ if search:
 # 추천 리스트 표시
 if filtered:
     st.write("추천 종목:")
-    for name in filtered:
-        if st.button(name):
+    for i, name in enumerate(filtered):
+    if st.button(name, key=f"add_{name}_{i}"):
             code = stock_map[name]
             if code not in stocks:
                 stocks.append(code)
