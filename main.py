@@ -97,3 +97,14 @@ while True:
     run()
     print("⏳ 60초 후 다시 실행...\n")
     time.sleep(60)
+
+from telegram_bot import send_msg
+
+result = ""
+
+for name, score in results:
+    msg = f"{name} 점수:{score}"
+    print(msg)
+    result += msg + "\n"
+
+send_msg(result)
