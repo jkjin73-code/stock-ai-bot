@@ -8,7 +8,13 @@ stocks = {
     "Tesla": "TSLA",
     "Nvidia": "NVDA",
     "Microsoft": "MSFT",
-    "Amazon": "AMZN"
+    "Amazon": "AMZN",
+
+    "000660.KS",  # SK하이닉스
+    "035420.KS",  # 네이버
+    "035720.KS",  # 카카오
+    "005930.KS",  # 삼성전자 🔥 추가
+    "051910.KS"   # LG화학 🔥 추가
 }
 
 def get_stock_data(ticker):
@@ -95,8 +101,8 @@ def run():
 
 while True:
     run()
-    print("⏳ 60초 후 다시 실행...\n")
-    time.sleep(60)
+    print("⏳ 30분 후 다시 실행...\n")
+    time.sleep(1800)
 
 from telegram_bot import send_msg
 
